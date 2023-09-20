@@ -1,11 +1,6 @@
 import random
 
 
-def input_direction():
-    direction = None
-    while direction not in ['n', 's', 'e', 'w']:
-        direction = input("Enter a direction ('n', 's', 'e' or 'w'): ").lower()
-    return direction
 
 def generate_position():
     row = random.randint(0,grid_size-1)
@@ -58,7 +53,7 @@ id = 1
 
 message = f'My name is {name} and my id is {id}.'
 
-direction = input_direction()
+direction = random.choice(['n', 'e', 's', 'w'])
 stop_point = (grid_size-1, grid_size-1)
 send_message(row, column, direction, grid_size)
 
