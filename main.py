@@ -1,14 +1,41 @@
 import random
 
 
+def run_simulation(grid_size=10, target_row=9, target_column=9):
+    name, id, row, column, direction = setup_robot(grid_size)
+    print_greeting(name, id)
+    navigate_robot(row, column, direction, grid_size, target_row, target_column)
+    
 
-def generate_position():
+    
+
+def setup_robot(grid_size):
+    name = input("Robot name: ")
+    id = 1
+    row, column, direction = generate_position(grid_size)
+    return name, id, row, column, direction
+
+def generate_position(grid_size):
     row = random.randint(0,grid_size-1)
     column = random.randint(0,grid_size-1)
-    return row,column
+    direction = random.choice(['n', 'e', 's', 'w'])
+    return row, column, direction
 
+def print_greeting(name,id):
+    print(f"Hi, my name is {name}. My ID is {id}")
 
-def move_a_square(row, column, direction):
+def navigate_robot(row, column, direction, grid_size, target_row, target_column):
+    stop_point = (target_row, target_column)
+    send_message(row, column, direction, grid_size)
+
+    while (row,column) != stop_point:
+        row, column = move_a_square(row, column, direction, grid_size)
+        print("Moving one step forward")
+        if is_stuck(row, column, direction, grid_size):
+            direction = turn_right(direction)
+        send_message(row, column, direction, grid_size)
+
+def move_a_square(row, column, direction, grid_size):
     if direction == 'n':
         row = max(0, row-1)
     elif direction == 's':
@@ -21,8 +48,8 @@ def move_a_square(row, column, direction):
     return row, column
 
 
-def is_stuck(row, column, direction):
-    return (row, column) == move_a_square(row, column, direction)
+def is_stuck(row, column, direction, grid_size):
+    return (row, column) == move_a_square(row, column, direction, grid_size)
 
 
 def turn_right(direction):
@@ -44,26 +71,12 @@ def send_message(row, column, direction, grid_size):
 
 
 # Randomise robot name and coordinates
-grid_size = 10
-name = input("Robot name: ")
-row, column = generate_position()
-age = 4
-id = 1
+run_simulation()
 
 
-message = f'My name is {name} and my id is {id}.'
-
-direction = random.choice(['n', 'e', 's', 'w'])
-stop_point = (grid_size-1, grid_size-1)
-send_message(row, column, direction, grid_size)
 
 
-while (row,column) != stop_point:
-    row, column = move_a_square(row, column, direction)
-    print("Moving one step forward")
-    if is_stuck(row, column, direction):
-        direction = turn_right(direction)
-    send_message(row, column, direction, grid_size)
+
 
 
 
