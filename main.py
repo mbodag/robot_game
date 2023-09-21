@@ -1,28 +1,12 @@
 import random
+from robot import Robot
 
 
-def run_simulation(grid_size=10, target_row=9, target_column=9):
-    name, id, row, column, direction = setup_robot(grid_size)
-    print_greeting(name, id)
+def run_simulation(robot, grid_size=10, target_row=9, target_column=9):
+    name, id, (row, column), direction = robot.name, robot.id, robot.position, robot.direction
+    print(robot)
     navigate_robot(row, column, direction, grid_size, target_row, target_column)
     
-
-    
-
-def setup_robot(grid_size):
-    name = input("Robot name: ")
-    id = 1
-    row, column, direction = generate_position(grid_size)
-    return name, id, row, column, direction
-
-def generate_position(grid_size):
-    row = random.randint(0,grid_size-1)
-    column = random.randint(0,grid_size-1)
-    direction = random.choice(['n', 'e', 's', 'w'])
-    return row, column, direction
-
-def print_greeting(name,id):
-    print(f"Hi, my name is {name}. My ID is {id}")
 
 def navigate_robot(row, column, direction, grid_size, target_row, target_column):
     stop_point = (target_row, target_column)
@@ -71,7 +55,7 @@ def send_message(row, column, direction, grid_size):
 
 
 # Randomise robot name and coordinates
-run_simulation()
+run_simulation(Robot("John"))
 
 
 
