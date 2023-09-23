@@ -1,11 +1,6 @@
 import random
 from robot import Robot
-
-def ask_name():
-    ''' 
-    Prompts the user for the name of the robot and returns it
-    '''
-    return input("What is the robot's name? ")
+from robot_init import initialise_robot
 
 
 def find_direction_name(direction):
