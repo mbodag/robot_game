@@ -1,15 +1,14 @@
 import random
 
 class Robot:
-    instances = 0
-    grid_size = 10
 
-    def __init__(self, name) -> None:
-        self.instances += 1
-        self.id = self.instances
+
+    def __init__(self, name, id, position, direction, grid_size) -> None:
+        self.id = id
         self.name = name
-        self.position = (random.randint(0, self.grid_size-1) , random.randint(0,self.grid_size-1))
-        self.direction = random.choice(['n', 'e', 's', 'w'])
+        self.grid_size = grid_size
+        self.position = position
+        self.direction = direction
         self.target = (9,9)
 
     def __repr__(self):

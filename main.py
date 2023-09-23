@@ -1,6 +1,6 @@
 import random
 from robot import Robot
-from robot_init import initialise_robot
+from robot_init import RobotFactory
 
 
 def find_direction_name(direction):
@@ -20,8 +20,12 @@ def send_message(row, column, direction):
 
 
 # Randomise robot name and coordinates
-rob1 = Robot(ask_name())
-rob1.navigate()
+fac1 = RobotFactory()
+robots = fac1.create_robots(4)
+for rob in robots:
+    print(rob)
+
+
 
 
 
