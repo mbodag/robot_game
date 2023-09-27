@@ -1,16 +1,21 @@
 import random
 from board import Board
+from constants import *
+from sprite_object import RobotSprite
 
 class Robot:
 
 
-    def __init__(self, name, id, position, direction, board: Board) -> None:
+    def __init__(self, name, id, position, direction, board: Board, color = (0,0,0)) -> None:
         self.id = id
         self.name = name
         self.board = board
         self.position = position
         self.direction = direction
         self.target = (9,9)
+        self.color = color
+        self.screen_position = (40 + SQUARE_SIZE* (self.position[1]+ 1/2), 40 + SQUARE_SIZE* (self.position[0]+ 1/2))
+        self.repr_sprite = RobotSprite(*self.screen_position,self.color)
 
     def __repr__(self):
         return (f"{self.name}, id = {self.id}")
@@ -73,11 +78,6 @@ class Robot:
         
         return facing_north_wall or facing_south_wall or facing_west_wall or facing_east_wall
 
-
-    def navigate(self):
-        '''
-        '''
-        pass
 
 
 if __name__ == "__main__":
