@@ -1,11 +1,8 @@
 import pygame
+from constants import *
+
 
 pygame.init()
-
-WIDTH = 800
-HEIGHT = 800
-
-WHITE = (255,255,255)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Sprite Groups")

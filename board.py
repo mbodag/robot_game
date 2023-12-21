@@ -15,6 +15,7 @@ class Board:
         self.barriers = self.disallowed_moves.copy()
         reversed_disallowed = [(end, start) for (start,end) in self.disallowed_moves]
         self.disallowed_moves += reversed_disallowed
+        self.history = []
         
     def has_space(self):
         for row in range(self.grid_size):
@@ -23,12 +24,22 @@ class Board:
                     return True
         return False
 
+    def take_snapshot(self):
+        snapshot = []
+        for robot in self.robots:
+            snapshot.append(robot.position)
+        return snapshot
+
+    def reset_history(self):
+        self.history = [self.take_snapshot()]
+
     def initiate_target(self):
         self.current_target = random.choice(self.targets)
         while self.robot_is_at_target():
             self.current_target = random.choice(self.targets)
         target_sprite = Target(62+self.current_target[0][1]*SQUARE_SIZE,62+self.current_target[0][0]*SQUARE_SIZE, self.current_target[1].color)
         return target_sprite
+
     def initiate_random_target(self):
         self.current_target = ((random.randint(0,15), random.randint(0,15)), random.choice(self.robots))
         while self.robot_is_at_target() or self.current_target[0] in [(7,7),(7,8),(8,7),(8,8)]:
@@ -68,6 +79,7 @@ class Board:
         if self.is_legal_move(robot, direction):
             robot.move_forward_to_obstacle()
             self.current_move_count += 1
+            self.history.append(self.take_snapshot())
 
     
 

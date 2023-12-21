@@ -5,11 +5,11 @@ from board import Board
 import pygame
 from constants import *
 from sprite_object import RobotSprite, Target
+import sys
 
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Ricochet Robots!")
-
 
 
 def main():
@@ -23,8 +23,9 @@ def main():
     robot_sprite_group = pygame.sprite.Group([robot.repr_sprite for robot in board.robots])
     board.append_targets(TARGETS)
     current_target_sprite = pygame.sprite.Group(board.initiate_random_target())
-    print(current_target_sprite)
+    board.reset_history()
     currently_selected_robot = None
+
 
 
     run = True
@@ -36,16 +37,16 @@ def main():
         for event in event_list:
             
             if board.robot_is_at_target():
-                    current_target_sprite = pygame.sprite.Group(board.initiate_random_target())
-                    #Unselect all robots
-                    for robot in robot_group:
-                        robot.repr_sprite.selected = False
-                        currently_selected_robot = None
-
-
+                current_target_sprite = pygame.sprite.Group(board.initiate_random_target())
+                #Unselect all robots
+                for robot in robot_group:
+                    robot.repr_sprite.selected = False
+                    currently_selected_robot = None
+                board.reset_history()
 
             if event.type == pygame.QUIT:
                 run = False
+            
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 #Select the robot that was clicked on
@@ -62,22 +63,31 @@ def main():
                             else: 
                                 currently_selected_robot = None
             
-            if currently_selected_robot is not None and event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 #Move the selected robot according to the arrow key that is pressed
-                if event.key == pygame.K_LEFT:
-                    currently_selected_robot.direction = 'l'
-                    board.make_a_robot_move(currently_selected_robot)
-                if event.key == pygame.K_UP:
-                    currently_selected_robot.direction = 'u'
-                    board.make_a_robot_move(currently_selected_robot)
-                if event.key == pygame.K_DOWN:
-                    currently_selected_robot.direction = 'd'
-                    board.make_a_robot_move(currently_selected_robot)
-                if event.key == pygame.K_RIGHT:
-                    currently_selected_robot.direction = 'r'
-                    board.make_a_robot_move(currently_selected_robot)
-                currently_selected_robot.repr_sprite.x, currently_selected_robot.repr_sprite.y = (40 + SQUARE_SIZE* (currently_selected_robot.position[1]+ 1/2), 40 + SQUARE_SIZE* (currently_selected_robot.position[0]+ 1/2))
-                    
+                if currently_selected_robot is not None:
+                    if event.key == pygame.K_LEFT:
+                        currently_selected_robot.direction = 'l'
+                        board.make_a_robot_move(currently_selected_robot)
+                    if event.key == pygame.K_UP:
+                        currently_selected_robot.direction = 'u'
+                        board.make_a_robot_move(currently_selected_robot)
+                    if event.key == pygame.K_DOWN:
+                        currently_selected_robot.direction = 'd'
+                        board.make_a_robot_move(currently_selected_robot)
+                    if event.key == pygame.K_RIGHT:
+                        currently_selected_robot.direction = 'r'
+                        board.make_a_robot_move(currently_selected_robot)
+                    currently_selected_robot.update_sprite()
+                if event.key == pygame.K_u and len(board.history) > 1:
+                    for robot_idx in range(len(board.robots)):
+                        loop_robot = board.robots[robot_idx]
+                        loop_robot.position = board.history[-2][robot_idx]
+                        loop_robot.update_sprite()
+                    board.history = board.history[:-1]
+                    board.current_move_count -= 1
+
+
         board.draw_board(WIN)
         current_target_sprite.draw(WIN)
         robot_sprite_group.update()

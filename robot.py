@@ -36,6 +36,9 @@ class Robot:
         elif self.direction == 'l':
             column = max(0, column-1)
         self.position = (row, column)
+
+    def update_sprite(self):
+        self.repr_sprite.x, self.repr_sprite.y = (40 + SQUARE_SIZE* (self.position[1]+ 1/2), 40 + SQUARE_SIZE* (self.position[0]+ 1/2))
     
     def test_move_a_square(self):
         '''
